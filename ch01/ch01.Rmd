@@ -1,0 +1,339 @@
+Chapter 1. An Abridged Introduction to Finance
+========================================================
+* 발표자 : 김무성
+* 교재 : 
+* 참고자료 - http://www.nomurawarrants.com/glossary.html
+
+# Content
+
+* 1.1 Financial Securities
+ -  1.1.1 Bonds and the Continuous Compounding of Interest Rates
+ - 1.1.2 Stocks: Trade, Price and Indices
+ - 1.1.3 Options and Other Derivatives
+ - 1.1.4 Portfolios and Collective Investment
+* 1.2 Financial Engineering
+ - 1.2.1 Trading Positions and Attitudes
+ - 1.2.2 On Price and Value of Stocks. The Discounted 
+ - 1.2.3 Arbitrage and Risk-Neutral Valuation Principle
+ - 1.2.4 The Efficient Market Hypothesis and Computational Complexity
+* 1.3 Notes, Computer Lab and Problems
+ - 1.3.1 Bibliographic remarks
+ - 1.3.2 Possibly the First Option Contract in Histo1.3.3 On Short Selling
+ - 1.3.4 R Lab
+ - 1.3.5 Research Problem
+ - 1.3.6 Problem (Simple Bounds on Calls and Puts)
+ - 1.3.7 Problem (More Strategies with Options)
+ - 1.3.8 Problem
+ - 1.3.9 Problem
+
+---------------
+
+# 1.1 Financial Securities
+
+ * Financial instruments (금융상품)
+ * Securies (유가증권) 
+   - http://www.emh.co.kr/content.pl?marketable_securities
+   - http://100.daum.net/encyclopedia/view.do?docid=b17a1114a   
+ * Debt (채권)
+   - bond (채권)
+   - commercial note (어음)
+   - bank deposit (은행계좌)
+ * Equity (지분)
+ * Derivative (파생상품)
+   - futures Contract (선도) - https://sites.google.com/site/wankyuchoi/home/curriculum/derivatives/4
+   - forward Contract (선물) - http://www.valuestar.co.kr/pages/board/plainBody.jsp?id=4506&board=d646580f0b93df2baf15b38477268a61
+   - option (옵션) - http://ifins.com.ne.kr/3future/a321.htm
+   - swap (스왑) - http://www.bupdori.com/08-000-03-04.htm
+   - stock option (스톡옵션)
+ * exchange markets (장내 시장)
+   - United States are the New York Stock Exchange (NYSE)
+   - Chicago Board Options Exchange (CBOE)
+   - Nasdaq
+   - Europe the London Stock Exchange (LSE)
+   - Deutsche Börse, and Spanish Exchange Markets (BME)
+   - Tokyo Stock Exchange
+   - Shanghai Stock Exchange   
+
+## 1.1.1 Bonds and the Continuous Compounding of Interest Rates
+
+ * A bond is a long-term loan contract between two parties,
+ * issuer(발행사) and the holder(보유자)
+ * borrower or debtor, lender
+ * principal(원금)
+ * coupon (이자표) : the successive interest payments
+ * maturity date (만기일)
+ 
+ 
+### Compounding the interest
+
+* Compouding the interest (복리)
+ -  We should all be aware that most of all risk–free securities that earn interest at a certain fixed rate have their value computed through time by compounding the interest.
+ - This means that the interest earned at a certain moment is added to the current value of the investment and the next interest is computed over the resulting sum.
+ - Therefore the value of the security with interest depends not only on the interest rate, but also on the frequency in which the interest is compounded.
+ 
+ <img src="figure/tbl1.1.png" style="width: 80%;"/>
+ 
+ <img src="figure/eq1.1.png" style="width: 80%;"/>
+ 
+ <img src="figure/eq1.2.png" style="width: 80%;"/>
+ 
+ <img src="figure/eq1.3.png" style="width: 80%;"/>
+
+ <img src="figure/eq1.4.png" style="width: 80%;"/>
+
+ <img src="figure/eq1.5.png" style="width: 80%;"/>
+ 
+ <img src="figure/eq1.5.after.png" style="width: 80%;"/>
+
+
+### Payoff and profit of bonds
+ 
+  * payoff
+   - The payoff of any security is its value at maturity. For a bond, its payoff is the principal plus all interests paid on the principal, and given by Eq.(1.2), or if continuously compounding of interest is assumed it is given by Eq.(1.3).
+  * profit 
+   - The profit of a security is its risk-adjusted payoff discounting the initial investment, which includes contract fees or any other transaction costs.
+   - For bonds there are usually no transactions costs or fees (or if there were, we can assume them to be included in the principal), and the risk is null.
+   - hence, the profit given by a bond is obtained by discounting the principal to the payoff  
+   
+
+ <img src="figure/eq1.5.after2.png" style="width: 80%;"/>
+ 
+----------------------
+
+## 1.1.2 Stocks: Trade, Price and Indices
+
+ * Stock (주식) : A share of a company’s stock is a claim on part of the company’s assets and earnings.
+  - common (보통주)
+  - preferred (우선주)
+  - http://blog.daum.net/daumfinance/5409387 
+ * shares outstanding (주식발행)
+ * market value or market capitalization (시가총액)
+ * shareholder (주주)
+ 
+ <img src="figure/box1.1.2.png" style="width: 80%;"/>
+
+ <img src="figure/fig1.1.png" style="width: 80%;"/>
+ 
+ 
+ * order type - http://www.goodi.com/cst/gchannel/home/gchannel_home_522.htm
+  - Market order
+  - Limit order
+  - Stop orders
+ 
+
+### Reading a stock quotes table
+
+ <img src="figure/fig1.2.png" style="width: 80%;"/>
+ 
+ * Ticker : the company’s id for the market (e.g. for General Electric Co. is GE).
+ * Open : the price of the stock at the opening time of the market session
+ * Close : the price of the stock at the current time, if the market is in session, or the
+ * High : (or Max) is the maximum price reached by the stock between the Open and the Close price.
+ * Low : (or Min) is the minimum price reached by the stock between the Open and the Close price.
+ * Volume : is the number of shares traded between the times of Open and Close.
+ * Adjusted Close : is the closing price adjusted to include any dividend payments plus any other corporate actions that affect the stock price (e.g. splits and rights
+offerings).
+
+### R Example 1.1
+
+```{r}
+#install.packages("quantmod")
+library(quantmod)
+
+# retrieve historical price data for General Electric Co. from Yahoo Finance
+getSymbols('GE',src='yahoo', from="2000-01-01", to="2009-12-30")
+# to see headers of file (OHLCV type)
+names(GE)
+head(GE)
+# extract Adjusted Close
+geAdj = GE$GE.Adjusted["2000-01-01/2000-01-20"]
+head(geAdj)
+# compute max, min and mean
+max(geAdj); min(geAdj); mean(geAdj)
+# draw a chart
+chartSeries(GE)
+```
+
+### Payoff and profit of stocks
+
+ <img src="figure/eq1.6.png" style="width: 80%;"/>
+ 
+ <img src="figure/eq1.7.png" style="width: 80%;"/>
+ 
+### Stock indices
+
+ * Price weighted
+ * Capitalization-weighted
+
+
+### Example 1.2 (A price weighted index)
+
+The Dow Jones Industrial Average, conceived by Charles Dow and Edward Jones (1896), is computed by the following formula
+
+<img src="figure/eq1.8.png" style="width: 80%;"/>
+
+
+### Example 1.3 (A capitalization weighted index)
+
+The Madrid Stock Exchange principal index, IBEX35, is computed by the following formula
+
+<img src="figure/eq1.9.png" style="width: 80%;"/>
+
+
+### Example 1.4 (Value Line Stock Index)
+
+One of the most reputed market index, used as benchmark for American and Canadian stock markets, is the Value Line Index. This is a composite index of about 1,700 companies from the New York Stock Exchange, NASDAQ, AMEX, and the Toronto Stock Exchange. Originally launched in 1961, it is calculated as an equally weighted geometric average, the index VLIC. Then in 1988, an arithmetic average version for the same composition of stocks, the VLIA, was released. The formula for calculating the Value Line Geometric Index (VLIC) is
+
+<img src="figure/eq1.10.png" style="width: 80%;"/>
+
+where VLIC_t stands for the value of the index at time t, C_i,_t is the current (or Close) price of stock i at time t , and n is the number of stocks. For the Value Line Arithmetic Index (VLIA), the formula with similar nomenclature is given by
+
+<img src="figure/eq1.10.png" style="width: 80%;"/>
+
+
+### Comparing the performance of two or more stocks
+
+### Example 1.5 As an example of using an index as benchmark for our investments
+
+<img src="figure/eq1.3.png" style="width: 80%;"/>
+
+
+------------------
+
+## 1.1.3 Options and Other Derivatives
+
+### Options
+
+* European
+* Bermudan
+* Asian
+* Barrier
+
+### Reading an option quotes
+
+ <img src="figure/eq1.1.3.first.png" style="width: 80%;"/>
+
+ <img src="figure/fig1.4.png" style="width: 80%;"/>
+
+### Payoff and profit of options
+
+ <img src="figure/eq1.12.png" style="width: 80%;"/>
+
+ <img src="figure/eq1.13.png" style="width: 80%;"/>
+
+ <img src="figure/eq1.14.png" style="width: 80%;"/>
+ 
+ <img src="figure/eq1.15.png" style="width: 80%;"/>
+ 
+ <img src="figure/tbl1.2.png" style="width: 80%;"/>
+ 
+ <img src="figure/fig1.5.png" style="width: 80%;"/>
+ 
+ <img src="figure/fig1.6.png" style="width: 80%;"/>
+ 
+
+
+### The option pricing problem
+
+### Forward and futures contracts
+
+### Payoff and profit
+
+---------------
+
+## 1.1.4 Portfolios and Collective Investment
+
+### Mutual funds and ETF
+
+
+---------------
+
+# 1.2 Financial Engineering
+
+------------------
+
+## 1.2.1 Trading Positions and Attitudes
+
+### Long and short positions
+### Hedgers, speculators and arbitrageurs
+### Bulls and bears
+### Market timing or buy-and-hold
+
+-------------------
+
+## 1.2.2 On Price and Value of Stocks. The Discounted Cash Flow model
+
+---------------------
+
+##1.2.3 Arbitrage and Risk-Neutral Valuation Principle
+
+Principle of No Arbitrage
+
+### Risk-neutral valuation
+
+
+----------------------
+
+## 1.2.4 The Efficient Market Hypothesis and Computational Complexity
+
+ * Weak
+ * Semi–strong
+ * Strong
+
+-----------------------
+
+# 1.3 Notes, Computer Lab and Problems
+
+------------------------
+
+## 1.3.1 Bibliographic remarks
+
+------------------------
+
+## 1.3.2 Possibly the First Option Contract in History
+
+------------------------
+
+## 1.3.3 On Short Selling
+
+------------------------
+
+## 1.3.4 R Lab
+
+------------------------
+
+## 1.3.5 Research Problem
+
+------------------------
+
+## 1.3.6 Problem (Simple Bounds on Calls and Puts)
+
+
+------------------------
+
+## 1.3.7 Problem (More Strategies with Options)
+
+ * The strangle
+ * The strip
+ * The strap
+ * The butterfly spread
+
+------------------------
+
+## 1.3.8 Problem
+
+------------------------
+
+## 1.3.9 Problem
+
+
+
+
+
+
+
+
+
+
+
+
