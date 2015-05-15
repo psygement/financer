@@ -2,7 +2,9 @@
 title: "InterEco_15050215"
 author: "jspark"
 date: "Sunday, May 10, 2015"
-output: html_document
+output:
+  html_document:
+    keep_md: yes
 ---
 
 # 국제경제학 실습과 활용
@@ -168,7 +170,7 @@ Github아이디랑 같이 묶을수 있어서 회원가입의 번거로움은 �
 
 ```{r}
 library(Quandl)
-Quandl.auth("z4yj4Yn4ynskphR-Zz9A")
+Quandl.auth("z4yj4Yn4ynskphR-Zz9A") # 이것은 테스트 키입니다. 자신의 API Key를 넣어주세요
 ```
 
 
